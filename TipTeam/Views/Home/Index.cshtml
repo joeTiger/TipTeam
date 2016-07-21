@@ -1,0 +1,37 @@
+﻿<div class="container">
+
+      <div class="starter-template">
+        <h1>Bootstrap starter template</h1>
+        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+      </div>
+
+    @(Html.Kendo().Grid<TipTeam.Models.TipViewModel>()
+            .Name("grid")
+            .Columns(columns =>
+            {
+                columns.Bound(product => product.Id).Width(100);
+                columns.Bound(product => product.Data);
+                columns.Bound(product => product.Un).Width(250);
+                columns.Command(commands =>
+                {
+                    commands.Edit(); // The "edit" command will edit and update data items.
+                    commands.Destroy(); // The "destroy" command removes data items.
+                }).Title("Commands").Width(200);
+            })
+            .ToolBar(toolbar => toolbar.Create()) // The "create" command adds new data items.
+            .Editable(editable => editable.Mode(GridEditMode.InLine)) // Use inline editing mode.
+            .DataSource(dataSource =>
+                dataSource.Ajax()
+                  .Model(model =>
+                  {
+                      model.Id(product => product.Id); // Specify the property which is the unique identifier of the model.
+                      model.Field(product => product.Id).Editable(false); // Make the ProductID property not editable.
+                  })
+                  .Create(create => create.Action("Products_Create", "Home")) // Action invoked when the user saves a new data item.
+                  .Read(read => read.Action("Products_Read", "Home"))  // Action invoked when the grid needs data.
+                  .Update(update => update.Action("Products_Update", "Home"))  // Action invoked when the user saves an updated data item.
+                  .Destroy(destroy => destroy.Action("Products_Destroy", "Home")) // Action invoked when the user removes a data item.
+            )
+            .Pageable()
+    )
+    </div><!-- /.container -->
